@@ -1,4 +1,19 @@
-<script setup></script>
+<script setup>
+import { ref, computed } from "vue";
+import categories from "./mocks/categories.js";
+import mockProducts from "./mocks/products.js";
+
+const currencyCategory = ref("Все");
+
+const filterCategores = computed(() => {
+  if(currencyCategory.value === "Все"){
+    mockProducts
+  }
+  else {
+    mockProducts.filter(product => product.title === currencyCategory.value);
+  }
+});
+</script>
 
 <template>
  <header class="site-header">
@@ -25,160 +40,35 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">Новая коллекция 2026</p>
-    <h1>Всё для уюта<br>и вашего дома</h1>
-    <p>Товары, которые делают жизнь приятнее. Бесплатная доставка от 3 000 ₽.</p>
-    <a href="#catalog" class="hero-cta">Смотреть каталог</a>
-  </div>
-</section>
-
 <main class="main-content" id="catalog">
   <h2 class="section-title">Популярные товары</h2>
   <p class="section-sub">Выбор покупателей этой недели</p>
 
   <div class="filters">
-    <button class="filter-btn active">Все</button>
-    <button class="filter-btn">Освещение</button>
-    <button class="filter-btn">Текстиль</button>
-    <button class="filter-btn">Декор</button>
-    <button class="filter-btn">Мебель</button>
+    <button
+    :key="category"
+    v-for="category in categories"
+    @click="currencyCategory = category"
+    class="filter-btn"
+    :class="{ active: currencyCategory === category }"
+    >{{ category }}</button>
   </div>
 
   <div class="product-grid">
 
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80" alt="Настольная лампа Amber" loading="lazy">
-        <span class="card-badge">Скидка</span>
+    <article v-for="product in filterCategores" class="product-card">
+      <div :key="product.id" class="card-image">
+        <img :src="product.img" :alt="product.description" loading="lazy">
+        <span v-if="product.additional" class="card-badge">{{ product.additional }}</span>
       </div>
       <div class="card-body">
-        <span class="card-category">Освещение</span>
-        <h3 class="card-title">Настольная лампа Amber</h3>
-        <p class="card-desc">Тёплый рассеянный свет, регулируемая яркость. Металлическое основание с матовым покрытием.</p>
+        <span class="card-category">{{ product.title }}</span>
+        <h3 class="card-title">{{ product.description }}</h3>
+        <p class="card-desc">{{ product.text }}</p>
         <div class="card-footer">
           <div class="price-wrap">
-            <span class="card-price-old">4 200 ₽</span>
-            <span class="card-price">3 490 ₽</span>
-          </div>
-          <button class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            В корзину
-          </button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=600&q=80" alt="Плед Soft Wool" loading="lazy">
-        <span class="card-badge">Новинка</span>
-      </div>
-      <div class="card-body">
-        <span class="card-category">Текстиль</span>
-        <h3 class="card-title">Плед Soft Wool</h3>
-        <p class="card-desc">Мягкий плед из смеси шерсти и хлопка. Размер 130×170 см, доступен в 8 цветах.</p>
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="card-price">2 190 ₽</span>
-          </div>
-          <button class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            В корзину
-          </button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&q=80" alt="Ваза Ceramic Bowl" loading="lazy">
-      </div>
-      <div class="card-body">
-        <span class="card-category">Декор</span>
-        <h3 class="card-title">Ваза Ceramic Bowl</h3>
-        <p class="card-desc">Ручная работа из белой глины. Идеальна для сухих цветов и как самостоятельный предмет декора.</p>
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="card-price">1 890 ₽</span>
-          </div>
-          <button class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            В корзину
-          </button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80" alt="Кресло Linen Chair" loading="lazy">
-        <span class="card-badge">Хит</span>
-      </div>
-      <div class="card-body">
-        <span class="card-category">Мебель</span>
-        <h3 class="card-title">Кресло Linen Chair</h3>
-        <p class="card-desc">Лёгкое кресло в скандинавском стиле. Льняная обивка, дубовые ножки, съёмный чехол.</p>
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="card-price-old">22 000 ₽</span>
-            <span class="card-price">18 900 ₽</span>
-          </div>
-          <button class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            В корзину
-          </button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=600&q=80" alt="Набор свечей Forest" loading="lazy">
-      </div>
-      <div class="card-body">
-        <span class="card-category">Декор</span>
-        <h3 class="card-title">Набор свечей Forest</h3>
-        <p class="card-desc">Соевые свечи с ароматами кедра, пихты и мха. Горят до 40 часов каждая.</p>
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="card-price">1 290 ₽</span>
-          </div>
-          <button class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            В корзину
-          </button>
-        </div>
-      </div>
-    </article>
-
-    <article class="product-card">
-      <div class="card-image">
-        <img src="https://images.unsplash.com/photo-1620264847303-cc0b4a28b75a?w=600&q=80" alt="Полотенце Lux Terry" loading="lazy">
-      </div>
-      <div class="card-body">
-        <span class="card-category">Текстиль</span>
-        <h3 class="card-title">Полотенце Lux Terry</h3>
-        <p class="card-desc">Махровое полотенце 70×140 см. Плотность 600 г/м², быстро впитывает влагу.</p>
-        <div class="card-footer">
-          <div class="price-wrap">
-            <span class="card-price">890 ₽</span>
+            <span v-if="product.oldPrice" class="card-price-old">{{ product.oldPrice }}</span>
+            <span class="card-price">{{ product.newPrice }}</span>
           </div>
           <button class="add-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -362,59 +252,6 @@ nav {
   padding: 0 6px;
   min-width: 20px;
   text-align: center;
-}
-
-.hero {
-  background: #fff;
-  border-bottom: 1px solid #E4E4DF;
-  padding: 56px 24px;
-  text-align: center;
-}
-
-.hero-inner {
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.hero-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #2D6A4F;
-  margin-bottom: 12px;
-}
-
-.hero h1 {
-  font-family: 'Raleway', sans-serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  line-height: 1.15;
-  text-wrap: balance;
-  margin-bottom: 16px;
-}
-
-.hero p {
-  color: #6B6B65;
-  font-size: 1.05rem;
-  max-width: 480px;
-  margin: 0 auto 28px;
-}
-
-.hero-cta {
-  display: inline-block;
-  background: #2D6A4F;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 12px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.15s;
-}
-
-.hero-cta:hover {
-  background: #1B4332;
 }
 
 .main-content {
@@ -708,6 +545,9 @@ nav {
 }
 
 @media (max-width: 860px) {
+  nav {
+    display: none;
+  }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
