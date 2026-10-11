@@ -6,11 +6,12 @@ import mockProducts from "./mocks/products.js";
 const currencyCategory = ref("Все");
 
 const filterCategores = computed(() => {
-  if(currencyCategory.value === "Все"){
-    mockProducts
+
+  if(currencyCategory.value == "Все"){
+    return mockProducts
   }
   else {
-    mockProducts.filter(product => product.title === currencyCategory.value);
+    return mockProducts.filter(product => product.title === currencyCategory.value);
   }
 });
 </script>
