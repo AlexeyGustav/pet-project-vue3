@@ -1,7 +1,6 @@
 <template>
   <header class="site-header">
     <div class="header-inner">
-      <!-- Логотип проекта -->
       <a class="logo" href="#">
         <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -11,7 +10,6 @@
         <span class="logo-text"><b>ДОМ</b>&УЮТ</span>
       </a>
 
-      <!-- Поиск -->
       <form class="search" role="search" @submit.prevent>
         <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -26,7 +24,15 @@
         />
       </form>
 
-      <!-- Кнопка корзины (без изменений) -->
+      <a class="account-btn" href="#" aria-label="Личный кабинет">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span class="account-text">Войти</span>
+      </a>
+
       <button class="cart-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/>
@@ -60,7 +66,6 @@
   gap: 24px;
 }
 
-/* ---------- Логотип ---------- */
 .logo {
   display: flex;
   align-items: center;
@@ -84,13 +89,13 @@
   }
 }
 
-/* ---------- Поиск ---------- */
 .search {
   position: relative;
   flex: 1;
   max-width: 480px;
   display: flex;
   align-items: center;
+  margin-left: auto;
 }
 
 .search-icon {
@@ -128,7 +133,27 @@
   }
 }
 
-/* ---------- Кнопка корзины (как было) ---------- */
+.account-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4a4a44;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: #2d6a4f;
+    background: #f0f5f1;
+  }
+}
+
 .cart-btn {
   display: flex;
   align-items: center;
@@ -145,7 +170,6 @@
   transition: background 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-left: auto;
 
   &:hover {
     background: #1b4332;
@@ -163,25 +187,30 @@
   text-align: center;
 }
 
-/* ---------- Адаптив ---------- */
 @media (max-width: 640px) {
   .header-inner {
-    gap: 12px;
+    gap: 8px;
     padding: 0 16px;
   }
 
   .logo .logo-text {
-    display: none; /* на мобильных оставляем только иконку */
+    display: none;
   }
 
   .search {
     max-width: none;
   }
 
+  .account-btn {
+    padding: 8px;
+
+    .account-text {
+      display: none;
+    }
+  }
+
   .cart-btn {
     padding: 8px 10px;
-
-    /* скрываем текст «Корзина», оставляем иконку и счётчик */
     font-size: 0;
     gap: 4px;
 

@@ -23,16 +23,15 @@ import Characteristics from './components/Characteristics.vue';
 import Navigation from './components/Navigation.vue';
 import ToolBar from './components/ToolBar.vue';
 import Product from './components/Product.vue';
-import mockProducts from './mocks/products.js';
 
-const currencyCategory = ref('Все');
 
-const filterCategores = computed(() => {
-  if (currencyCategory.value === 'Все') {
-    return mockProducts;
-  }
-  return mockProducts.filter((product) => product.title === currencyCategory.value);
-});
+// const filterCategores = computed(() => {
+//   if (currencyCategory.value === 'Все') {
+//     return mockProducts
+//   }
+//   return mockProducts.filter((product) => product.title === currencyCategory.value)
+// })
+
 </script>
 
 <style lang="scss">
