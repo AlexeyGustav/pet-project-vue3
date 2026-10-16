@@ -7,3 +7,4 @@ export async function getProducts() {
 
   return res.json();
 }
+
