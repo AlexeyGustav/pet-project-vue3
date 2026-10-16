@@ -38,6 +38,7 @@
       </div>
     </article>
   </div>
+  
   <!-- <div class="product-grid">
     <article v-for="product in filterCategores" :key="product.id" class="product-card">
       <div class="card-image">
