@@ -39,6 +39,5 @@
 </template>
 
 <script setup>
-defineProps(['product']);
-
+defineProps(['product'])
 </script>

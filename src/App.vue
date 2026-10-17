@@ -61,7 +61,6 @@ const filterCategores = computed(() => {
     return dataProducts.value.filter((product) => product.title === currencyCategory.value)
   }
 });
-console.log('filterCategores: ', filterCategores);
 
 </script>
 
@@ -152,17 +151,13 @@ body {
   transition: background 0.15s;
   font-family: 'Inter', sans-serif;
 }
-.reset-btn:hover {
-  background: #eef5f0;
-}
+.reset-btn:hover { background: #eef5f0; }
 
 .filter-group {
   padding: 14px 0;
   border-bottom: 1px solid #f0f0ec;
 }
-.filter-group:last-of-type {
-  border-bottom: none;
-}
+.filter-group:last-of-type { border-bottom: none; }
 
 .filter-title {
   font-size: 0.72rem;
@@ -182,8 +177,7 @@ body {
 }
 .range-track {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0; right: 0;
   height: 4px;
   background: #e5e0d8;
   border-radius: 2px;
@@ -207,12 +201,8 @@ body {
   top: 50%;
   margin-top: -8px;
 }
-.range-thumb--min {
-  left: 10%;
-}
-.range-thumb--max {
-  left: 75%;
-}
+.range-thumb--min { left: 10%; }
+.range-thumb--max { left: 75%; }
 
 .price-labels {
   display: flex;
@@ -234,9 +224,7 @@ body {
   cursor: pointer;
   transition: color 0.15s;
 }
-.filter-check:hover {
-  color: #2d6a4f;
-}
+.filter-check:hover { color: #2d6a4f; }
 
 .filter-check input[type='checkbox'] {
   appearance: none;
@@ -250,9 +238,7 @@ body {
   flex-shrink: 0;
   transition: all 0.15s;
 }
-.filter-check input[type='checkbox']:hover {
-  border-color: #2d6a4f;
-}
+.filter-check input[type='checkbox']:hover { border-color: #2d6a4f; }
 .filter-check input[type='checkbox']:checked {
   background: #2d6a4f;
   border-color: #2d6a4f;
@@ -270,9 +256,7 @@ body {
 }
 
 /* ---------- КАТАЛОГ ---------- */
-.catalog {
-  min-width: 0;
-} /* чтобы grid-колонка не растягивалась контентом */
+.catalog { min-width: 0; } /* чтобы grid-колонка не растягивалась контентом */
 
 .tabs {
   display: flex;
@@ -326,9 +310,7 @@ body {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
   display: flex;
   flex-direction: column;
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 .product-card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
@@ -348,9 +330,7 @@ body {
   display: block;
   transition: transform 0.3s;
 }
-.product-card:hover .card-image img {
-  transform: scale(1.04);
-}
+.product-card:hover .card-image img { transform: scale(1.04); }
 
 .card-badge {
   position: absolute;
@@ -443,18 +423,12 @@ body {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.15s,
-    transform 0.1s;
+  transition: background 0.15s, transform 0.1s;
   white-space: nowrap;
   flex-shrink: 0;
 }
-.add-btn:hover {
-  background: #1b4332;
-}
-.add-btn:active {
-  transform: scale(0.97);
-}
+.add-btn:hover { background: #1b4332; }
+.add-btn:active { transform: scale(0.97); }
 
 /* ---------- ФУТЕР ---------- */
 .site-footer {
@@ -501,9 +475,7 @@ body {
   font-size: 0.9rem;
   transition: color 0.15s;
 }
-.footer-links a:hover {
-  color: #2d6a4f;
-}
+.footer-links a:hover { color: #2d6a4f; }
 .footer-bottom {
   border-top: 1px solid #e4e4df;
   padding-top: 20px;
@@ -513,10 +485,7 @@ body {
   gap: 12px;
   flex-wrap: wrap;
 }
-.footer-bottom p {
-  color: #6b6b65;
-  font-size: 0.8rem;
-}
+.footer-bottom p { color: #6b6b65; font-size: 0.8rem; }
 
 /* ---------- АДАПТИВ ---------- */
 @media (max-width: 960px) {
@@ -531,24 +500,13 @@ body {
 }
 
 @media (max-width: 860px) {
-  nav {
-    display: none;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  nav { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 480px) {
-  .main-content {
-    padding: 32px 16px;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
+  .main-content { padding: 32px 16px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .product-grid { grid-template-columns: 1fr; }
 }
 </style>
