@@ -19,8 +19,11 @@
         <input
           class="search-input"
           type="search"
+          :value="textVisible"
+          @input="$emit('update:textVisible', $event.target.value)"
+          @focus="$emit('focusedEmit', true)"
+          @blur="$emit('focusedEmit', false)"
           placeholder="Поиск товаров…"
-          aria-label="Поиск по каталогу"
         />
       </form>
 
@@ -45,6 +48,13 @@
     </div>
   </header>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+const emit = defineEmits(['update:textVisible', 'focusedEmit']);
+defineProps(['textVisible']);
+
+</script>
 
 <style lang="scss" scoped>
 .site-header {

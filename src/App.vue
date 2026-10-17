@@ -1,12 +1,11 @@
 <template>
-  <Header />
+  <Header @focusedEmit="isSearchFocused = $event" :textVisible="search" @update:textVisible="search = $event"/>
+  <p>{{ search }}</p>
   <div class="main-content">
-    <h2 class="section-title">Популярные товары</h2>
-    <p class="section-sub">Выбор покупателей этой недели</p>
     <div class="layout">
       <Characteristics />
       <section class="catalog">
-        <div class="tabs">
+        <div v-if="!isSearchFocused" class="tabs">
           <Navigation
           v-for="category in titles"
           :key="category"
@@ -16,10 +15,10 @@
           />
         </div>
         <ToolBar
-        :sum="filterCategores.length"
+        :sum="filteredProducts.length"
         />
         <div class="product-grid">
-          <Product v-for="product in filterCategores" :product="product" />
+          <Product v-for="product in filteredProducts" :key="product.id" :product="product" />
         </div>
       </section>
     </div>
@@ -41,6 +40,8 @@ const currencyCategory = ref('Все');
 const dataProducts = ref([]);
 const titles = ref([]);
 const error = ref(null);
+const search = ref('');
+const isSearchFocused = ref(false);
 
 onMounted(() => {
 getProducts()
@@ -54,13 +55,29 @@ getProducts()
   })
 });
 
-const filterCategores = computed(() => {
-  if (currencyCategory.value === 'Все') {
-    return dataProducts.value
-  } else {
-    return dataProducts.value.filter((product) => product.title === currencyCategory.value)
+const filteredProducts = computed(() => {
+  let result = dataProducts.value;
+
+  // Категории
+  if (currencyCategory.value !== 'Все') {
+    result = result.filter((product) => product.title === currencyCategory.value)
   }
+
+  // Поиск инпута
+  const query = search.value.trim().toLowerCase();
+  if(query) {
+    result = result.filter((word) => {
+      return word.description.toLowerCase().includes(query)
+    })
+  }
+
+  if(result.length === 0){
+    console.log('result.length');
+  }
+
+  return result
 });
+
 
 </script>
 
@@ -89,26 +106,12 @@ body {
   padding: 48px 24px;
 }
 
-.section-title {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.section-sub {
-  color: #6b6b65;
-  font-size: 0.9rem;
-  margin-bottom: 32px;
-}
-
 /* ---------- МАКЕТ: ФИЛЬТРЫ + КАТАЛОГ ---------- */
 .layout {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr); /* minmax(0,1fr) — чтобы grid не распирало */
   gap: 32px;
   align-items: start;
-  margin-top: 32px;
 }
 
 /* ---------- ПАНЕЛЬ ФИЛЬТРОВ ---------- */
