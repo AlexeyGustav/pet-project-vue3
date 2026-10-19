@@ -1,22 +1,35 @@
 <template>
-  <Header @focusedEmit="isSearchFocused = $event" :textVisible="search" @update:textVisible="search = $event"/>
-  <p>{{ search }}</p>
+  <Header
+    @focusedEmit="isSearchFocused = $event"
+    :textVisible="search"
+    @update:textVisible="search = $event"
+  />
   <div class="main-content">
     <div class="layout">
-      <Characteristics />
+      <AllFilters
+        :min="minPrice"
+        :max="maxPrice"
+        v-model:valueRange="valueRange"
+        v-model:selectedMarks="selectedMarks"
+        v-model:selectedMaterial="material"
+        :materialList="materialList"
+        :colorList="colorList"
+        v-model:currentColor="currentColor"
+        :styleList="styleList"
+        v-model:currentStyle="currentStyle"
+        @clear="clearFilters"
+      />
       <section class="catalog">
         <div v-if="!isSearchFocused" class="tabs">
           <Navigation
-          v-for="category in titles"
-          :key="category"
-          :category="category"
-          :active="currencyCategory === category"
-          @activeTab="currencyCategory = $event"
+            v-for="category in titles"
+            :key="category"
+            :category="category"
+            :active="currencyCategory === category"
+            @activeTab="currencyCategory = $event"
           />
         </div>
-        <ToolBar
-        :sum="filteredProducts.length"
-        />
+        <ToolBar :sum="filteredProducts.length" />
         <div class="product-grid">
           <Product v-for="product in filteredProducts" :key="product.id" :product="product" />
         </div>
@@ -27,58 +40,121 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
-import Characteristics from './components/Characteristics.vue'
-import Navigation from './components/Navigation.vue'
-import ToolBar from './components/ToolBar.vue'
-import Product from './components/Product.vue'
-import { getProducts } from '@/api/api.js'
+import { ref, computed, onMounted } from 'vue';
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
+import AllFilters from './components/AllFilters.vue';
+import Navigation from './components/Navigation.vue';
+import ToolBar from './components/ToolBar.vue';
+import Product from './components/Product.vue';
+import { getProducts } from '@/api/api.js';
 
+// Состояния
+// Текущее название категории
 const currencyCategory = ref('Все');
+//Все товары
 const dataProducts = ref([]);
+// Все названия категорий
 const titles = ref([]);
+// Состояние ошибки
 const error = ref(null);
+// Поиск
 const search = ref('');
+// Фокус инпута (Для скрытия/показа навигации)
 const isSearchFocused = ref(false);
-
-onMounted(() => {
-getProducts()
-  .then((data) => {
-    dataProducts.value = data.products;
-    titles.value = data.categories;
-  })
-  .catch((event) => {
-    error.value = event.message
-    console.error('Ошибка загрузки товаров:', event)
-  })
+// Значения Range в фильтре цены
+const valueRange = ref(0);
+// Значение метки
+const selectedMarks = ref([]);
+// Матерал
+const materialList = ref([]);
+const material = ref([]);
+// Цвет
+const colorList = ref([]);
+const currentColor = ref([]);
+// Стиль
+const styleList = ref([]);
+const currentStyle = ref([]);
+// Кнопка сбросить
+function clearFilters() {
+  search.value = '';
+  valueRange.value = maxPrice.value;
+  selectedMarks.value = '';
+  material.value = '';
+  currentColor.value = '';
+  currentStyle.value = '';
+}
+// Границы фильтра цен
+const minPrice = computed(() => {
+  return Math.min(...dataProducts.value.map((p) => p.price));
 });
 
+const maxPrice = computed(() => {
+  return Math.max(...dataProducts.value.map((p) => p.price));
+});
+
+// Компонет смонторован
+onMounted(() => {
+  getProducts()
+    .then((data) => {
+      dataProducts.value = data.products;
+      titles.value = data.categories;
+      valueRange.value = maxPrice.value;
+      materialList.value = data.filters.material;
+      colorList.value = data.filters.color;
+      styleList.value = data.filters.style;
+    })
+    .catch((event) => {
+      error.value = event.message;
+      console.error('Ошибка загрузки товаров:', event);
+    });
+});
+// Основная логика, где происходят расчёты и какие товары надо вывести
 const filteredProducts = computed(() => {
   let result = dataProducts.value;
 
   // Категории
   if (currencyCategory.value !== 'Все') {
-    result = result.filter((product) => product.title === currencyCategory.value)
+    result = result.filter((product) => product.title === currencyCategory.value);
   }
 
   // Поиск инпута
   const query = search.value.trim().toLowerCase();
-  if(query) {
+  if (query) {
     result = result.filter((word) => {
-      return word.description.toLowerCase().includes(query)
-    })
+      return word.description.toLowerCase().includes(query);
+    });
   }
 
-  if(result.length === 0){
-    console.log('result.length');
+  // Цена
+  if (valueRange.value > 0 && valueRange.value < maxPrice.value) {
+    result = result.filter((price) => {
+      return price.price <= valueRange.value;
+    });
   }
 
-  return result
+  //Метка
+  if (selectedMarks.value.length) {
+    result = result.filter((mark) => selectedMarks.value.includes(mark.additional));
+  }
+
+  // Материал
+  if (material.value.length) {
+    result = result.filter((p) => p.material.some((m) => material.value.includes(m)));
+  }
+
+  // Цвет
+  if (currentColor.value.length) {
+    result = result.filter((p) => p.color.some((m) => currentColor.value.includes(m)));
+  }
+
+  // Стиль
+  if (currentStyle.value.length) {
+    result = result.filter((p) => p.style.some((m) => currentStyle.value.includes(m)));
+  }
+
+  return result;
 });
-
-
 </script>
 
 <style lang="scss">
@@ -106,114 +182,19 @@ body {
   padding: 48px 24px;
 }
 
-/* ---------- МАКЕТ: ФИЛЬТРЫ + КАТАЛОГ ---------- */
 .layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr); /* minmax(0,1fr) — чтобы grid не распирало */
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
-
-/* ---------- ПАНЕЛЬ ФИЛЬТРОВ ---------- */
-.filters-panel {
-  background: #fff;
-  border: 1px solid #e4e4df;
-  border-radius: 12px;
-  padding: 20px;
-  position: sticky;
-  top: 88px; /* 64px header + 24px отступ */
-  max-height: calc(100vh - 112px);
-  overflow-y: auto;
-}
-
-.filters-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 4px;
-}
-
-.filters-head h3 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a1a18;
-}
-
-.reset-btn {
-  background: transparent;
-  border: none;
-  color: #2d6a4f;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: background 0.15s;
-  font-family: 'Inter', sans-serif;
-}
-.reset-btn:hover { background: #eef5f0; }
 
 .filter-group {
   padding: 14px 0;
   border-bottom: 1px solid #f0f0ec;
 }
-.filter-group:last-of-type { border-bottom: none; }
-
-.filter-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 10px;
-}
-
-/* --- Слайдер цены --- */
-.range {
-  position: relative;
-  height: 20px;
-  display: flex;
-  align-items: center;
-}
-.range-track {
-  position: absolute;
-  left: 0; right: 0;
-  height: 4px;
-  background: #e5e0d8;
-  border-radius: 2px;
-}
-.range-fill {
-  position: absolute;
-  left: 10%;
-  right: 25%;
-  height: 4px;
-  background: #2d6a4f;
-  border-radius: 2px;
-}
-.range-thumb {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border: 2px solid #2d6a4f;
-  border-radius: 50%;
-  transform: translateX(-50%);
-  top: 50%;
-  margin-top: -8px;
-}
-.range-thumb--min { left: 10%; }
-.range-thumb--max { left: 75%; }
-
-.price-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #6b6b65;
-  margin-top: 8px;
-  font-variant-numeric: tabular-nums;
+.filter-group:last-of-type {
+  border-bottom: none;
 }
 
 /* --- Чекбоксы --- */
@@ -227,7 +208,9 @@ body {
   cursor: pointer;
   transition: color 0.15s;
 }
-.filter-check:hover { color: #2d6a4f; }
+.filter-check:hover {
+  color: #2d6a4f;
+}
 
 .filter-check input[type='checkbox'] {
   appearance: none;
@@ -241,7 +224,9 @@ body {
   flex-shrink: 0;
   transition: all 0.15s;
 }
-.filter-check input[type='checkbox']:hover { border-color: #2d6a4f; }
+.filter-check input[type='checkbox']:hover {
+  border-color: #2d6a4f;
+}
 .filter-check input[type='checkbox']:checked {
   background: #2d6a4f;
   border-color: #2d6a4f;
@@ -259,7 +244,9 @@ body {
 }
 
 /* ---------- КАТАЛОГ ---------- */
-.catalog { min-width: 0; } /* чтобы grid-колонка не растягивалась контентом */
+.catalog {
+  min-width: 0;
+} /* чтобы grid-колонка не растягивалась контентом */
 
 .tabs {
   display: flex;
@@ -313,7 +300,9 @@ body {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 .product-card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
@@ -333,7 +322,9 @@ body {
   display: block;
   transition: transform 0.3s;
 }
-.product-card:hover .card-image img { transform: scale(1.04); }
+.product-card:hover .card-image img {
+  transform: scale(1.04);
+}
 
 .card-badge {
   position: absolute;
@@ -426,12 +417,18 @@ body {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
+  transition:
+    background 0.15s,
+    transform 0.1s;
   white-space: nowrap;
   flex-shrink: 0;
 }
-.add-btn:hover { background: #1b4332; }
-.add-btn:active { transform: scale(0.97); }
+.add-btn:hover {
+  background: #1b4332;
+}
+.add-btn:active {
+  transform: scale(0.97);
+}
 
 /* ---------- ФУТЕР ---------- */
 .site-footer {
@@ -478,7 +475,9 @@ body {
   font-size: 0.9rem;
   transition: color 0.15s;
 }
-.footer-links a:hover { color: #2d6a4f; }
+.footer-links a:hover {
+  color: #2d6a4f;
+}
 .footer-bottom {
   border-top: 1px solid #e4e4df;
   padding-top: 20px;
@@ -488,7 +487,10 @@ body {
   gap: 12px;
   flex-wrap: wrap;
 }
-.footer-bottom p { color: #6b6b65; font-size: 0.8rem; }
+.footer-bottom p {
+  color: #6b6b65;
+  font-size: 0.8rem;
+}
 
 /* ---------- АДАПТИВ ---------- */
 @media (max-width: 960px) {
@@ -503,13 +505,24 @@ body {
 }
 
 @media (max-width: 860px) {
-  nav { display: none; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  nav {
+    display: none;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 480px) {
-  .main-content { padding: 32px 16px; }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-  .product-grid { grid-template-columns: 1fr; }
+  .main-content {
+    padding: 32px 16px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

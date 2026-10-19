@@ -50,7 +50,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 const emit = defineEmits(['update:textVisible', 'focusedEmit']);
 defineProps(['textVisible']);
 
