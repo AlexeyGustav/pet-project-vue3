@@ -3,6 +3,7 @@
     @focusedEmit="isSearchFocused = $event"
     :textVisible="search"
     @update:textVisible="search = $event"
+    :headerBasket="headerBasket"
   />
   <div class="main-content">
     <div class="layout">
@@ -31,7 +32,12 @@
         </div>
         <ToolBar :sum="filteredProducts.length" />
         <div class="product-grid">
-          <Product v-for="product in filteredProducts" :key="product.id" :product="product" />
+          <Product
+            v-for="product in filteredProducts"
+            :key="product.id"
+            :product="product"
+            @update:model-value="addBasket($event)"
+          />
         </div>
       </section>
     </div>
@@ -75,15 +81,40 @@ const currentColor = ref([]);
 // Стиль
 const styleList = ref([]);
 const currentStyle = ref([]);
+// Корзина
+const basketRef = ref([]);
+const basketHead = ref('');
+
 // Кнопка сбросить
 function clearFilters() {
   search.value = '';
   valueRange.value = maxPrice.value;
-  selectedMarks.value = '';
-  material.value = '';
-  currentColor.value = '';
-  currentStyle.value = '';
+  selectedMarks.value = [];
+  material.value = [];
+  currentColor.value = [];
+  currentStyle.value = [];
 }
+
+// Добавить товар в корзину
+function addBasket(item) {
+  const existing = basketRef.value.find((p) => p.id === item.id);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    basketRef.value.push({ ...item, quantity: 1 });
+  }
+}
+
+// Корзина в хедере
+const headerBasket = computed(() => {
+  if (basketHead.value === '') {
+    return (basketHead.value = 0);
+  }
+  basketHead.value = basketRef.value.length;
+  return basketHead.value;
+});
+
 // Границы фильтра цен
 const minPrice = computed(() => {
   return Math.min(...dataProducts.value.map((p) => p.price));
