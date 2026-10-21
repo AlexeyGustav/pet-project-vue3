@@ -37,6 +37,9 @@
             :key="product.id"
             :product="product"
             @update:model-value="addBasket($event)"
+            :basket="basketRef"
+            @decrease="minusItemProduct($event)"
+            @increase="increaseQuantity($event)"
           />
         </div>
       </section>
@@ -83,7 +86,6 @@ const styleList = ref([]);
 const currentStyle = ref([]);
 // Корзина
 const basketRef = ref([]);
-const basketHead = ref('');
 
 // Кнопка сбросить
 function clearFilters() {
@@ -95,7 +97,7 @@ function clearFilters() {
   currentStyle.value = [];
 }
 
-// Добавить товар в корзину
+// Добавить/убавить товар в корзину
 function addBasket(item) {
   const existing = basketRef.value.find((p) => p.id === item.id);
 
@@ -106,14 +108,25 @@ function addBasket(item) {
   }
 }
 
-// Корзина в хедере
-const headerBasket = computed(() => {
-  if (basketHead.value === '') {
-    return (basketHead.value = 0);
+// Убавить товар
+function minusItemProduct(product) {
+  const existing = basketRef.value.find((p) => p.id === product.id);
+  if (!existing) return;
+  if (existing.quantity > 1) {
+    existing.quantity -= 1;
+  } else {
+    basketRef.value = basketRef.value.filter((p) => p.id !== product.id);
   }
-  basketHead.value = basketRef.value.length;
-  return basketHead.value;
-});
+}
+
+// Добавить товар
+function increaseQuantity(product) {
+  const existing = basketRef.value.find((p) => p.id === product.id);
+  if (existing) existing.quantity += 1;
+}
+
+// Корзина в хедере
+const headerBasket = computed(() => basketRef.value.length);
 
 // Границы фильтра цен
 const minPrice = computed(() => {
@@ -205,6 +218,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   line-height: 1.6;
+  position: relative;
 }
 
 .main-content {
@@ -555,5 +569,14 @@ body {
   .product-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.log {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  background-color: #fff;
+  z-index: 100;
+  left: 0;
 }
 </style>

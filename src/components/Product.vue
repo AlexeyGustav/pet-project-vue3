@@ -17,7 +17,7 @@
           </span>
           <span class="card-price">{{ product.newPrice }}</span>
         </div>
-        <button  class="add-btn" type="button"  @click="$emit('update:modelValue', product)">
+        <button v-if="!prop.basket.find((item) => item.id === product.id)" class="add-btn" type="button" @click="$emit('update:modelValue', product)">
           <svg
             width="14"
             height="14"
@@ -34,7 +34,7 @@
           В корзину
         </button>
 
-        <!-- <div v-else class="quantity-control">
+        <div v-else class="quantity-control">
         <button
           class="quantity-btn"
           type="button"
@@ -42,9 +42,7 @@
         >
           −
         </button>
-
-        <span class="quantity-value">5</span>
-
+        <span class="quantity-value">{{basketItem.quantity}}</span>
         <button
           class="quantity-btn"
           type="button"
@@ -52,15 +50,23 @@
         >
           +
         </button>
-      </div> -->
+      </div>
       </div>
     </div>
   </article>
 </template>
 
 <script setup>
-defineProps(['product', 'quantity']);
+import { computed } from 'vue';
+
+const prop = defineProps(['product', 'basket']);
 defineEmits(['update:modelValue', 'increase', 'decrease']);
+
+const basketItem = computed(() => {
+  return prop.basket.find((p) => p.id === prop.product.id);
+})
+
+
 </script>
 
 <style scoped>
