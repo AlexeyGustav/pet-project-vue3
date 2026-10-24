@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+a{
+  all: initial;
+}
+
 html,
 body {
   height: 100%;
@@ -340,8 +344,9 @@ body {
     gap: 24px;
   }
   .filters-panel {
-    position: static;
-    max-height: none;
+    position: static !important;
+    max-height: none !important;
+    overflow-y: visible !important;
   }
 }
 

@@ -19,10 +19,10 @@
         <input
           class="search-input"
           type="search"
-          :value="textVisible"
-          @input="$emit('update:textVisible', $event.target.value)"
-          @focus="$emit('focusedEmit', true)"
-          @blur="$emit('focusedEmit', false)"
+          :value="search.input"
+          @input="search.writeInput($event)"
+          @focus="search.focusInput"
+          @blur="search.blurInput"
           placeholder="Поиск товаров…"
         />
       </form>
@@ -36,26 +36,31 @@
         <span class="account-text">Войти</span>
       </a>
 
-      <button class="cart-btn">
+      <router-link :to="{'name': 'basket'}" class="cart-btn" >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/>
           <circle cx="20" cy="21" r="1"/>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
         </svg>
         Корзина
-        <span class="cart-count">{{ headerBasket }}</span>
-      </button>
+        <span class="cart-count">{{ basket.headerBasket }}</span>
+      </router-link>
     </div>
   </header>
 </template>
 
 <script setup>
-const emit = defineEmits(['update:textVisible', 'focusedEmit']);
-defineProps(['textVisible', 'headerBasket']);
+import { useBasket } from '../stores/basket.js';
+import { useSearch } from '../stores/search.js';
+
+const basket = useBasket();
+const search = useSearch();
 
 </script>
 
 <style lang="scss" scoped>
+
+
 .site-header {
   position: sticky;
   top: 0;

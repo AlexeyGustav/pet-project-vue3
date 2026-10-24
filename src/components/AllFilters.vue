@@ -65,6 +65,8 @@ const currentStyle = defineModel('currentStyle');
   overflow-y: auto;
 }
 
+
+
 .filters-head {
   display: flex;
   align-items: center;

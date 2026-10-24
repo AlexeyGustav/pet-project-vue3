@@ -163,9 +163,9 @@
           <span class="summary-total-price">63 498 ₽</span>
         </div>
 
-        <button class="checkout-btn">
+        <router-link :to="{'name': 'payment'}" class="checkout-btn">
           Оформить заказ
-        </button>
+        </router-link>
       </aside>
 
     </div>
@@ -185,14 +185,8 @@
 </template>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 .cart-page {
-  min-height: 100vh;
   background: #f7f7f5;
   font-family: 'Inter', sans-serif;
   color: #1a1a18;
@@ -438,6 +432,8 @@
 }
 
 .checkout-btn {
+  display: block;
+  text-align: center;
   width: 100%;
   padding: 14px 0;
   background: #2d6a4f;
