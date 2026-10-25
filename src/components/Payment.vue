@@ -1,6 +1,43 @@
 <template>
   <div class="checkout-page">
 
+    <!-- ─── Шапка ─────────────────────────────────────── -->
+    <header class="checkout-header">
+      <div class="header-inner">
+
+        <a class="logo" href="#">
+          <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 6 4 9 4 14a8 8 0 0 0 16 0c0-5-4-8-8-12z" />
+            <path d="M12 22V12" />
+          </svg>
+          <span class="logo-text"><b>ДОМ</b>&amp;УЮТ</span>
+        </a>
+
+        <router-link :to="{'name': 'basket'}" class="back-btn" aria-label="Вернуться в корзину">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          <span class="back-text">В корзину</span>
+        </router-link>
+
+        <nav class="header-steps" aria-label="Шаги оформления">
+          <span class="step step--done">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M2.5 6.5L5 9L10.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Корзина
+          </span>
+          <span class="step-divider"></span>
+          <span class="step step--active">Оплата</span>
+          <span class="step-divider"></span>
+          <span class="step">Подтверждение</span>
+        </nav>
+
+      </div>
+    </header>
+
     <div class="checkout-body">
 
       <!-- Левая часть: выбор способа и форма -->
@@ -255,7 +292,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .checkout-page {
   min-height: 100vh;
   background: #f7f7f5;
@@ -268,31 +305,66 @@
 
 /* ─── Шапка ─────────────────────────────────────────── */
 .checkout-header {
-  background: #fff;
-  border-bottom: 1px solid #e4e4df;
-  padding: 18px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e4e4df;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
 }
 
-.back-link {
-  display: inline-flex;
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  color: #6b6b65;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.15s;
-  flex-shrink: 0;
+  gap: 24px;
 }
 
-.back-link:hover {
-  color: #2d6a4f;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #1a1a18;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  .logo-icon {
+    color: #2d6a4f;
+  }
+
+  .logo-text b {
+    color: #2d6a4f;
+    font-weight: 700;
+  }
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4a4a44;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: #2d6a4f;
+    background: #f0f5f1;
+  }
 }
 
 /* Шаги */
@@ -301,6 +373,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
+  margin-left: auto;
 }
 
 .step {
@@ -368,18 +441,18 @@
   color: #6b6b65;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
 
-.pay-tab:hover {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
-}
+  &:hover {
+    border-color: #2d6a4f;
+    color: #2d6a4f;
+  }
 
-.pay-tab--active {
-  border-color: #2d6a4f;
-  background: #f0faf5;
-  color: #2d6a4f;
-  font-weight: 600;
+  &.pay-tab--active {
+    border-color: #2d6a4f;
+    background: #f0faf5;
+    color: #2d6a4f;
+    font-weight: 600;
+  }
 }
 
 .pay-tab-icon {
@@ -410,28 +483,28 @@
   overflow: hidden;
   margin-bottom: 28px;
   min-height: 160px;
-}
 
-.card-preview::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+  }
 
-.card-preview::after {
-  content: '';
-  position: absolute;
-  bottom: -60px;
-  right: 40px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    right: 40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .card-preview-chip {
@@ -506,10 +579,10 @@
 
 .field-input-wrap {
   position: relative;
-}
 
-.field-input-wrap .field-input {
-  padding-right: 44px;
+  .field-input {
+    padding-right: 44px;
+  }
 }
 
 .field-icon {
@@ -533,18 +606,17 @@
   color: #1a1a18;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
+
+  &::placeholder {
+    color: #c9c9c2;
+  }
+
+  &:focus {
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  }
 }
 
-.field-input::placeholder {
-  color: #c9c9c2;
-}
-
-.field-input:focus {
-  border-color: #2d6a4f;
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
-}
-
-/* CVV подсказка */
 .cvv-hint {
   background: none;
   border: none;
@@ -561,19 +633,38 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
+
+  &:hover .save-card-box {
+    border-color: #2d6a4f;
+  }
 }
 
 .save-card-checkbox {
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
-}
 
-.save-card-checkbox input[type='checkbox'] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+  input[type='checkbox'] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  input:checked + .save-card-box {
+    background: #2d6a4f;
+    border-color: #2d6a4f;
+  }
+
+  input:checked + .save-card-box::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translateY(-1px);
+  }
 }
 
 .save-card-box {
@@ -587,25 +678,6 @@
   justify-content: center;
   transition: all 0.15s;
   flex-shrink: 0;
-}
-
-.save-card-checkbox input:checked + .save-card-box {
-  background: #2d6a4f;
-  border-color: #2d6a4f;
-}
-
-.save-card-checkbox input:checked + .save-card-box::after {
-  content: '';
-  display: block;
-  width: 5px;
-  height: 9px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translateY(-1px);
-}
-
-.save-card:hover .save-card-box {
-  border-color: #2d6a4f;
 }
 
 .save-card-text {
@@ -627,16 +699,16 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.15s, transform 0.1s;
   margin-top: 4px;
+
+  &:hover { background: #1b4332; }
+  &:active { transform: scale(0.98); }
 }
 
-.submit-btn:hover {
-  background: #1b4332;
-}
-
-.submit-btn:active {
-  transform: scale(0.98);
+.submit-btn--account {
+  margin-top: 0;
 }
 
 /* ─── Безопасность ──────────────────────────────────── */
@@ -690,15 +762,8 @@
   font-size: 14px;
   color: #3a3a36;
   line-height: 1.5;
-}
 
-.account-info svg {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.submit-btn--account {
-  margin-top: 0;
+  svg { flex-shrink: 0; margin-top: 2px; }
 }
 
 /* ─── Правая колонка: сводка ────────────────────────── */
@@ -719,7 +784,6 @@
   margin-bottom: 18px;
 }
 
-/* Мини-список товаров */
 .summary-items {
   list-style: none;
   display: flex;
@@ -777,14 +841,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Разделитель */
 .summary-divider {
   height: 1px;
   background: #f0f0ec;
   margin-bottom: 16px;
 }
 
-/* Строки итогов */
 .summary-lines {
   list-style: none;
   display: flex;
@@ -801,18 +863,14 @@
   font-size: 13px;
 }
 
-.summary-label {
-  color: #6b6b65;
-}
+.summary-label { color: #6b6b65; }
 
 .summary-value {
   font-weight: 500;
   color: #1a1a18;
 }
 
-.summary-value--green {
-  color: #2d6a4f;
-}
+.summary-value--green { color: #2d6a4f; }
 
 .summary-total {
   display: flex;
@@ -845,14 +903,24 @@
     position: static;
     order: -1;
   }
+
+  .header-steps {
+    display: none;
+  }
 }
 
-@media (max-width: 600px) {
-  .checkout-header {
-    padding: 14px 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+@media (max-width: 640px) {
+  .header-inner {
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .logo .logo-text {
+    display: none;
+  }
+
+  .back-btn .back-text {
+    display: none;
   }
 
   .pay-tabs {

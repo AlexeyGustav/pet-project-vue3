@@ -1,138 +1,118 @@
 <template>
   <div class="cart-page">
-    <!-- ─── Основное тело ──────────────────────────────── -->
-    <div class="cart-body">
+    <header class="cart-header">
+      <div class="header-inner">
+        <a class="logo" href="#">
+          <svg
+            class="logo-icon"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2C8 6 4 9 4 14a8 8 0 0 0 16 0c0-5-4-8-8-12z" />
+            <path d="M12 22V12" />
+          </svg>
+          <span class="logo-text"><b>ДОМ</b>&amp;УЮТ</span>
+        </a>
 
+        <router-link :to="{ name: 'main' }" class="back-btn" aria-label="Вернуться в каталог">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          <span class="back-text">В каталог</span>
+        </router-link>
+
+        <h1 class="cart-title">
+          Корзина
+          <span class="cart-badge">{{ basket.headerBasket }} {{ textHeader }}</span>
+        </h1>
+      </div>
+    </header>
+
+    <div v-if="basket.headerBasket" class="cart-body">
       <!-- Список товаров -->
       <section class="cart-items">
-
         <!-- Товар -->
-        <article class="cart-item">
-          <div class="item-image-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80"
-              alt="Часы Minimalist Watch"
-              class="item-image"
-            />
-          </div>
+        <div v-for="card in basket.items" :key="card.id">
+          <article class="cart-item">
+            <div class="item-image-wrap">
+              <img :src="card.img" alt="Часы Minimalist Watch" class="item-image" />
+            </div>
 
-          <div class="item-info">
-            <p class="item-category">Аксессуары</p>
-            <h2 class="item-name">Minimalist Watch</h2>
-            <p class="item-sku">Арт. MW-2024-BLK</p>
-          </div>
+            <div class="item-info">
+              <p class="item-category">{{ card.title }}</p>
+              <h2 class="item-name">{{ card.description }}</h2>
+              <p class="item-sku">{{ sliceText(card.text) }}</p>
+            </div>
 
-          <div class="item-controls">
-            <div class="qty-control">
-              <button class="qty-btn" aria-label="Уменьшить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                </svg>
-              </button>
-              <span class="qty-value">2</span>
-              <button class="qty-btn" aria-label="Увеличить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 2V12M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            <div class="item-controls">
+              <div class="qty-control">
+                <button
+                  class="qty-btn"
+                  aria-label="Уменьшить количество"
+                  @click="basket.minusCounter(card)"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M2 7H12"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+                <span class="qty-value">{{ card.quantity }}</span>
+                <button
+                  class="qty-btn"
+                  aria-label="Увеличить количество"
+                  @click="basket.plusCounter(card)"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M7 2V12M2 7H12"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <p class="item-price">{{ sumItem(card.price, card.quantity) }} ₽</p>
+
+              <button
+                @click="basket.deleteCard(card)"
+                class="item-remove"
+                aria-label="Удалить из корзины"
+              >
+                <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
+                  <path
+                    d="M3 4.5H15M7.5 4.5V3H10.5V4.5M6 4.5V14.25C6 14.664 6.336 15 6.75 15H11.25C11.664 15 12 14.664 12 14.25V4.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
               </button>
             </div>
-
-            <p class="item-price">15 990 ₽</p>
-
-            <button class="item-remove" aria-label="Удалить из корзины">
-              <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
-                <path d="M3 4.5H15M7.5 4.5V3H10.5V4.5M6 4.5V14.25C6 14.664 6.336 15 6.75 15H11.25C11.664 15 12 14.664 12 14.25V4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </article>
-
-        <div class="item-divider"></div>
-
-        <!-- Товар 2 -->
-        <article class="cart-item">
-          <div class="item-image-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=200&q=80"
-              alt="Парфюм Woody Noir"
-              class="item-image"
-            />
-          </div>
-
-          <div class="item-info">
-            <p class="item-category">Парфюмерия</p>
-            <h2 class="item-name">Woody Noir EDP</h2>
-            <p class="item-sku">Арт. WN-100ML</p>
-          </div>
-
-          <div class="item-controls">
-            <div class="qty-control">
-              <button class="qty-btn" aria-label="Уменьшить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                </svg>
-              </button>
-              <span class="qty-value">1</span>
-              <button class="qty-btn" aria-label="Увеличить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 2V12M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                </svg>
-              </button>
-            </div>
-
-            <p class="item-price">8 400 ₽</p>
-
-            <button class="item-remove" aria-label="Удалить из корзины">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M3 4.5H15M7.5 4.5V3H10.5V4.5M6 4.5V14.25C6 14.664 6.336 15 6.75 15H11.25C11.664 15 12 14.664 12 14.25V4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </article>
-
-        <div class="item-divider"></div>
-
-        <!-- Товар 3 -->
-        <article class="cart-item">
-          <div class="item-image-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80"
-              alt="Кроссовки Runner Pro"
-              class="item-image"
-            />
-          </div>
-
-          <div class="item-info">
-            <p class="item-category">Обувь</p>
-            <h2 class="item-name">Runner Pro X</h2>
-            <p class="item-sku">Арт. RPX-42-WHT</p>
-          </div>
-
-          <div class="item-controls">
-            <div class="qty-control">
-              <button class="qty-btn" aria-label="Уменьшить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                </svg>
-              </button>
-              <span class="qty-value">3</span>
-              <button class="qty-btn" aria-label="Увеличить количество">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 2V12M2 7H12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                </svg>
-              </button>
-            </div>
-
-            <p class="item-price">42 450 ₽</p>
-
-            <button class="item-remove" aria-label="Удалить из корзины">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M3 4.5H15M7.5 4.5V3H10.5V4.5M6 4.5V14.25C6 14.664 6.336 15 6.75 15H11.25C11.664 15 12 14.664 12 14.25V4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </article>
-
+          </article>
+          <div class="item-divider"></div>
+        </div>
       </section>
 
       <!-- Сводка заказа -->
@@ -142,15 +122,7 @@
         <ul class="summary-lines">
           <li class="summary-line">
             <span class="summary-label">Товаров</span>
-            <span class="summary-value">6 шт.</span>
-          </li>
-          <li class="summary-line">
-            <span class="summary-label">Стоимость товаров</span>
-            <span class="summary-value">66 840 ₽</span>
-          </li>
-          <li class="summary-line">
-            <span class="summary-label">Скидка</span>
-            <span class="summary-value summary-value--discount">−3 342 ₽</span>
+            <span class="summary-value">{{ sumItemsBasket() }} шт.</span>
           </li>
           <li class="summary-line">
             <span class="summary-label">Доставка</span>
@@ -160,32 +132,74 @@
 
         <div class="summary-total">
           <span class="summary-total-label">К оплате</span>
-          <span class="summary-total-price">63 498 ₽</span>
+          <span class="summary-total-price">{{ (basket.totalSum).toLocaleString("RU", "ru") }} ₽</span>
         </div>
 
-        <router-link :to="{'name': 'payment'}" class="checkout-btn">
-          Оформить заказ
-        </router-link>
+        <router-link :to="{ name: 'payment' }" class="checkout-btn"> Оформить заказ </router-link>
       </aside>
-
     </div>
 
     <!-- ─── Пустая корзина (скрыта при наличии товаров) ── -->
-    <div class="cart-empty" style="display: none;">
-      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 8H12L20 44H48L56 20H16" stroke="#C4C4C4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="24" cy="52" r="3" stroke="#C4C4C4" stroke-width="2.5"/>
-        <circle cx="44" cy="52" r="3" stroke="#C4C4C4" stroke-width="2.5"/>
+    <div v-else class="cart-empty">
+      <svg
+        width="164"
+        height="164"
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 8H12L20 44H48L56 20H16"
+          stroke="#C4C4C4"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="24" cy="52" r="3" stroke="#C4C4C4" stroke-width="2.5" />
+        <circle cx="44" cy="52" r="3" stroke="#C4C4C4" stroke-width="2.5" />
       </svg>
       <p class="cart-empty-text">Корзина пуста</p>
-      <a href="/catalog" class="cart-empty-link">Перейти в каталог</a>
     </div>
-
   </div>
 </template>
 
-<style scoped>
+<script setup>
+import { useBasket } from '../stores/basket.js';
+import { computed } from 'vue';
 
+const basket = useBasket();
+
+
+const textHeader = computed(() => {
+  const count = basket.headerBasket;
+
+  if (count % 10 === 1 && count % 100 !== 11) return 'товар';
+  if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20))
+    return 'товара';
+  return 'товаров';
+});
+
+function sliceText(text) {
+  const wordsArray = text.split(' ');
+  const textSlice = wordsArray.slice(0, 5).join(' ') + '...';
+  return textSlice;
+}
+
+// Количество товаров в корзине
+function sumItemsBasket() {
+  return basket.items.reduce((sum, item) => {
+    return sum + item.quantity;
+  }, 0);
+}
+
+function sumItem(item, quantity) {
+  const sumItem = item * quantity
+  basket.sumItem = sumItem;
+  return sumItem.toLocaleString('ru-RU')
+}
+</script>
+
+<style lang="scss" scoped>
 .cart-page {
   background: #f7f7f5;
   font-family: 'Inter', sans-serif;
@@ -193,6 +207,89 @@
   font-size: 15px;
   line-height: 1.6;
   padding: 0 0 60px;
+}
+
+.cart-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e4e4df;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4a4a44;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    color: #2d6a4f;
+    background: #f0f5f1;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #1a1a18;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  .logo-icon {
+    color: #2d6a4f;
+  }
+
+  .logo-text b {
+    color: #2d6a4f;
+    font-weight: 700;
+  }
+}
+
+.cart-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #1a1a18;
+  margin-left: auto;
+}
+
+.cart-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b6b65;
 }
 
 /* ─── Тело ──────────────────────────────────────────── */
@@ -312,7 +409,9 @@
   align-items: center;
   justify-content: center;
   color: #6b6b65;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .qty-btn:hover {
@@ -350,7 +449,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .item-remove:hover {
@@ -444,8 +545,11 @@
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
+  transition:
+    background 0.15s,
+    transform 0.1s;
   margin-bottom: 12px;
+  text-decoration: none;
 }
 
 .checkout-btn:hover {
@@ -495,6 +599,18 @@
 }
 
 @media (max-width: 900px) {
+  .header-inner {
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .logo .logo-text {
+    display: none;
+  }
+
+  .back-btn .back-text {
+    display: none;
+  }
 
   .cart-body {
     grid-template-columns: 1fr;

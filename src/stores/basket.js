@@ -3,6 +3,10 @@ import { defineStore } from 'pinia';
 
 export const useBasket = defineStore('basket', () => {
   const items = ref([]);
+  // Стоимость товаров в корзине
+  const totalSum = computed(() =>
+    items.value.reduce((sum, p) => sum + p.price * p.quantity, 0)
+  );
 
   // Корзина в хедере
   const headerBasket = computed(() => items.value.length);
@@ -16,8 +20,15 @@ export const useBasket = defineStore('basket', () => {
       items.value.push({ ...item, quantity: 1 });
     }
   }
+
+  // Добавить товар
+  function plusCounter(product) {
+    const existing = items.value.find((p) => p.id === product.id);
+    if (existing) existing.quantity += 1;
+  }
+
   // Убавить товар
-  function minusItemProduct(product) {
+  function minusCounter(product) {
     const existing = items.value.find((p) => p.id === product.id);
     if (!existing) return;
     if (existing.quantity > 1) {
@@ -26,11 +37,19 @@ export const useBasket = defineStore('basket', () => {
       items.value = items.value.filter((p) => p.id !== product.id);
     }
   }
-  // Добавить товар
-  function increaseQuantity(product) {
-    const existing = items.value.find((p) => p.id === product.id);
-    if (existing) existing.quantity += 1;
+
+  // Удалить товар
+  function deleteCard(product) {
+    items.value = items.value.filter((p) => p.id !== product.id);
   }
 
-  return { items, headerBasket, addBasket, minusItemProduct, increaseQuantity };
+  return {
+    items,
+    headerBasket,
+    addBasket,
+    minusCounter,
+    plusCounter,
+    deleteCard,
+    totalSum
+  };
 });

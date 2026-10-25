@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="main-content">
     <div class="layout">
       <AllFilters
@@ -32,16 +33,19 @@
             :product="product"
             @update:model-value="basket.addBasket($event)"
             :basket="basket.items"
-            @decrease="basket.minusItemProduct($event)"
-            @increase="basket.increaseQuantity($event)"
+            @decrease="basket.minusCounter($event)"
+            @increase="basket.plusCounter($event)"
           />
         </div>
       </section>
     </div>
   </div>
+  <Footer/>
 </template>
 
 <script setup>
+import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useBasket } from '../stores/basket.js';
 import { useSearch } from '../stores/search.js';
