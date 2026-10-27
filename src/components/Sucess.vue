@@ -28,18 +28,18 @@
         <div class="order-card-divider"></div>
         <div class="order-card-row">
           <span class="order-card-label">Дата оформления</span>
-          <span class="order-card-value">23 октября 2024</span>
+          <span class="order-card-value">{{ isoDate }}</span>
         </div>
         <div class="order-card-divider"></div>
         <div class="order-card-row">
           <span class="order-card-label">Сумма оплаты</span>
-          <span class="order-card-value order-card-value--bold">63 498 ₽</span>
+          <span class="order-card-value order-card-value--bold">{{ (basket.lastOrder.total).toLocaleString('RU', 'ru') }} ₽</span>
         </div>
         <div class="order-card-divider"></div>
         <div class="order-card-row">
           <span class="order-card-label">Способ оплаты</span>
           <span class="order-card-value">
-            Карта
+            {{ pay.typePay }}
           </span>
         </div>
         <div class="order-card-divider"></div>
@@ -54,14 +54,14 @@
 
       <!-- Действия -->
       <div class="success-actions">
-        <a href="/" class="btn-primary">
+        <router-link :to="{ name: 'main' }" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path d="M3 4H4.5L7.5 13H13.5L15.5 6.5H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="8" cy="15.5" r="1" stroke="currentColor" stroke-width="1.3"/>
             <circle cx="12.5" cy="15.5" r="1" stroke="currentColor" stroke-width="1.3"/>
           </svg>
           Вернуться в каталог
-        </a>
+        </router-link>
       </div>
 
       <!-- Подпись -->
@@ -72,6 +72,25 @@
     </main>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { useBasket } from '../stores/basket.js';
+import { usePayment } from '../stores/payment.js';
+
+
+
+const basket = useBasket();
+const pay = usePayment();
+
+const copySum = ref('');
+copySum.value = basket.totalSum.toLocaleString('RU', 'ru');
+const copy = copySum.value
+
+const today = new Date();
+const isoDate = today.toISOString().split('T')[0];
+
+</script>
 
 <style scoped>
 * {

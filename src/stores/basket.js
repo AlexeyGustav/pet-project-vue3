@@ -43,6 +43,16 @@ export const useBasket = defineStore('basket', () => {
     items.value = items.value.filter((p) => p.id !== product.id);
   }
 
+  // Копия суммы корзины, для окна успеха
+  const lastOrder = ref({ total: 0 });
+
+  function clearBasket() {
+    lastOrder.value = {
+      total: totalSum.value
+    };
+    items.value = [];
+  }
+
   return {
     items,
     headerBasket,
@@ -50,6 +60,8 @@ export const useBasket = defineStore('basket', () => {
     minusCounter,
     plusCounter,
     deleteCard,
-    totalSum
+    totalSum,
+    clearBasket,
+    lastOrder
   };
 });
