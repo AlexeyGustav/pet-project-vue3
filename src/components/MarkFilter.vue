@@ -17,13 +17,4 @@
 const selectedMarks = defineModel('selectedMarks');
 </script>
 
-<style lang="scss" scope>
-.filter-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 10px;
-}
-</style>
+<style lang="scss" scope></style>

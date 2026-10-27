@@ -11,22 +11,29 @@ export const router = createRouter({
     {
       path: "/",
       name: "main",
-      component: MainPage,
+      component: () => import('@/components/MainPage.vue'),
     },
+    // {
+    //   path: "/catalog",
+    //   component: CatalogLayout,
+    //   children: [
+
+    //   ],
+    // },
     {
       path: "/basket",
       name: "basket",
-      component: Basket,
+      component: () => import('@/components/Basket.vue'),
     },
     {
       path: "/payment",
       name: "payment",
-      component: Payment,
+      component: () => import('@/components/Payment.vue'),
     },
     {
       path: "/sucess",
       name: "sucess",
-      component: Sucess,
+      component: () => import('@/components/Sucess.vue'),
     },
   ],
 });
