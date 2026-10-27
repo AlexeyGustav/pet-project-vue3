@@ -2053,6 +2053,138 @@ body {
   .item-price {
     font-size: 15px;
   }
+
+  .nf-illustration svg {
+    width: 170px;
+    height: 155px;
+  }
+
+  .nf-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   СТРАНИЦА 404 (NotFound)
+   ============================================================ */
+.not-found {
+  min-height: 100vh;
+  background: #f7f7f5;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a18;
+}
+
+.nf-header {
+  background: #fff;
+  border-bottom: 1px solid #e4e4df;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+.nf-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.nf-illustration {
+  margin-bottom: 32px;
+  animation: sway 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(1.5deg);
+  }
+
+  75% {
+    transform: rotate(-1.5deg);
+  }
+}
+
+.nf-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  color: #1a1a18;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+}
+
+.nf-subtitle {
+  font-size: 16px;
+  color: #6b6b65;
+  line-height: 1.65;
+  max-width: 380px;
+  margin-bottom: 36px;
+}
+
+.nf-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 28px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: #2d6a4f;
+  color: #fff;
+  border: 1.5px solid #2d6a4f;
+}
+
+.btn--primary:hover {
+  background: #1b4332;
+  border-color: #1b4332;
+}
+
+.btn--ghost {
+  background: #fff;
+  color: #2d6a4f;
+  border: 1.5px solid #b7e4c7;
+}
+
+.btn--ghost:hover {
+  background: #f0faf5;
+  border-color: #2d6a4f;
 }
 
 @media (max-width: 400px) {
