@@ -408,7 +408,7 @@
       <aside class="checkout-summary">
         <h3 class="summary-title">Ваш заказ</h3>
 
-        <ul class="summary-items" v-for="card in basket.items">
+        <ul class="summary-items" :key="card.id" v-for="card in basket.items">
           <li class="summary-item">
             <div class="summary-item-img-wrap">
               <img :src="card.img" alt="" class="summary-item-img" />
