@@ -8,6 +8,6 @@
 </template>
 
 <script setup>
-const props = defineProps(['materialList']);
+defineProps(['materialList']);
 const selectedMaterial = defineModel('selectedMaterial');
 </script>
