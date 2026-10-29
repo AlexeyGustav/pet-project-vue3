@@ -68,4 +68,4 @@ const search = useSearch();
 
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
