@@ -90,6 +90,7 @@ const search = useSearch();
   gap: 24px;
 }
 
+
 .logo {
   display: flex;
   align-items: center;
