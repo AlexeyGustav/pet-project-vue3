@@ -1,56 +1,16 @@
 
 <template>
   <div class="success-page">
-
-    <!-- ─── Центральный блок ──────────────────────────── -->
     <main class="success-main">
 
       <!-- Иконка успеха -->
-      <div class="success-icon-wrap">
-        <div class="success-icon-ring success-icon-ring--outer"></div>
-        <div class="success-icon-ring success-icon-ring--inner"></div>
-        <div class="success-icon-circle">
-          <svg class="success-check" width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <path d="M8 18L15 25L28 11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
+     <SucessIcon/>
 
       <h1 class="success-title">Заказ оформлен!</h1>
       <p class="success-subtitle">Оплата прошла успешно. Мы уже готовим ваш заказ к отправке.</p>
 
       <!-- Карточка заказа -->
-      <div class="order-card">
-        <div class="order-card-row">
-          <span class="order-card-label">Номер заказа</span>
-          <span class="order-card-value order-card-value--accent">#ORD-20241023-8847</span>
-        </div>
-        <div class="order-card-divider"></div>
-        <div class="order-card-row">
-          <span class="order-card-label">Дата оформления</span>
-          <span class="order-card-value">{{ isoDate }}</span>
-        </div>
-        <div class="order-card-divider"></div>
-        <div class="order-card-row">
-          <span class="order-card-label">Сумма оплаты</span>
-          <span class="order-card-value order-card-value--bold">{{ (basket.lastOrder.total).toLocaleString('RU', 'ru') }} ₽</span>
-        </div>
-        <div class="order-card-divider"></div>
-        <div class="order-card-row">
-          <span class="order-card-label">Способ оплаты</span>
-          <span class="order-card-value">
-            {{ pay.typePay }}
-          </span>
-        </div>
-        <div class="order-card-divider"></div>
-        <div class="order-card-row order-card-row--status">
-          <span class="order-card-label">Статус</span>
-          <span class="status-badge">
-            <span class="status-dot"></span>
-            Подтверждён
-          </span>
-        </div>
-      </div>
+      <OrderCard/>
 
       <!-- Действия -->
       <div class="success-actions">
@@ -74,25 +34,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useBasket } from '../stores/basket.js';
-import { usePayment } from '../stores/payment.js';
-
-
-
-const basket = useBasket();
-const pay = usePayment();
-
-const copySum = ref('');
-copySum.value = basket.totalSum.toLocaleString('RU', 'ru');
-const copy = copySum.value
-
-const today = new Date();
-const isoDate = today.toISOString().split('T')[0];
+import SucessIcon from '@/ui/sucessIcon.vue';
+import OrderCard from '@/components/OrderCard.vue';
 
 </script>
 
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
   margin: 0;

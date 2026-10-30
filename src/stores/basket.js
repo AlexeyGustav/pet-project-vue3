@@ -44,12 +44,10 @@ export const useBasket = defineStore('basket', () => {
   }
 
   // Копия суммы корзины, для окна успеха
-  const lastOrder = ref({ total: 0 });
+  const lastOrder = ref([0]);
 
   function clearBasket() {
-    lastOrder.value = {
-      total: totalSum.value
-    };
+    lastOrder.value = totalSum.value;
     items.value = [];
   }
 

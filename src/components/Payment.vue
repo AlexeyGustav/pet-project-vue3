@@ -1,72 +1,7 @@
 <template>
   <div class="checkout-page">
     <!-- ─── Шапка ─────────────────────────────────────── -->
-    <header class="checkout-header">
-      <div class="header-inner">
-        <a class="logo" href="#">
-          <svg
-            class="logo-icon"
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <!-- стебли -->
-            <path d="M8 14c0-4 3-6 4-8" />
-            <path d="M16 14c0-4-2-5-4-8" />
-            <!-- листик -->
-            <path d="M12 6c1-2 3-2 3-2s0 2-1.5 3" fill="currentColor" stroke="none" opacity="0.5" />
-            <path d="M12 6c1-2 3-2 3-2s0 2-1.5 3" />
-            <!-- вишни -->
-            <circle cx="8" cy="17" r="3" fill="currentColor" stroke="none" />
-            <circle cx="16" cy="17" r="3" fill="currentColor" stroke="none" />
-            <!-- блик -->
-            <circle cx="7" cy="16" r="0.9" fill="white" stroke="none" opacity="0.5" />
-            <circle cx="15" cy="16" r="0.9" fill="white" stroke="none" opacity="0.5" />
-          </svg>
-          <span class="logo-text"><b>МАМИН</b>&nbsp;САД</span>
-        </a>
-
-        <router-link :to="{ name: 'basket' }" class="back-btn" aria-label="Вернуться в корзину">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M19 12H5M12 5l-7 7 7 7" />
-          </svg>
-          <span class="back-text">В корзину</span>
-        </router-link>
-
-        <nav class="header-steps" aria-label="Шаги оформления">
-          <span class="step step--done">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path
-                d="M2.5 6.5L5 9L10.5 4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            Корзина
-          </span>
-          <span class="step-divider"></span>
-          <span class="step step--active">Оплата</span>
-          <span class="step-divider"></span>
-          <span class="step">Подтверждение</span>
-        </nav>
-      </div>
-    </header>
+    <HeaderPayment />
 
     <div class="checkout-body">
       <!-- Левая часть: выбор способа и форма -->
@@ -74,70 +9,7 @@
         <h1 class="checkout-title">Способ оплаты</h1>
 
         <!-- Табы выбора способа -->
-        <div class="pay-tabs" role="tablist">
-          <button
-            @click="pay.typePay = 'Банковская карта'"
-            class="pay-tab pay-tab--active"
-            role="tab"
-            aria-selected="true"
-          >
-            <span class="pay-tab-icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect
-                  x="2"
-                  y="4.5"
-                  width="16"
-                  height="11"
-                  rx="2"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                />
-                <path d="M2 8.5H18" stroke="currentColor" stroke-width="1.5" />
-                <path
-                  d="M5 12.5H7"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M9 12.5H11"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </span>
-            Банковская карта
-          </button>
-          <button
-            @click="pay.typePay = 'Наличными при получении'"
-            class="pay-tab"
-            role="tab"
-            aria-selected="false"
-          >
-            <span class="pay-tab-icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect
-                  x="2"
-                  y="6"
-                  width="16"
-                  height="10"
-                  rx="1.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                />
-                <path
-                  d="M6 6V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <circle cx="10" cy="11" r="1.5" stroke="currentColor" stroke-width="1.3" />
-              </svg>
-            </span>
-            Наличными при получении
-          </button>
-        </div>
+        <SelectionTabs/>
 
         <!-- ─── Панель: Банковская карта ─────────────── -->
         <div v-if="pay.typePay === 'Банковская карта'" class="pay-panel" role="tabpanel">
@@ -405,38 +277,7 @@
       </main>
 
       <!-- Правая часть: сводка заказа -->
-      <aside class="checkout-summary">
-        <h3 class="summary-title">Ваш заказ</h3>
-
-        <ul class="summary-items" v-for="card in basket.items">
-          <li class="summary-item">
-            <div class="summary-item-img-wrap">
-              <img :src="card.img" alt="" class="summary-item-img" />
-            </div>
-            <div class="summary-item-info">
-              <p class="summary-item-name">{{ card.description }}</p>
-              <p class="summary-item-qty">{{ card.quantity }} шт.</p>
-            </div>
-            <p class="summary-item-price">{{ card.newPrice }}</p>
-          </li>
-        </ul>
-
-        <div class="summary-divider"></div>
-
-        <ul class="summary-lines">
-          <li class="summary-line">
-            <span class="summary-label">Доставка</span>
-            <span class="summary-value summary-value--green">Бесплатно</span>
-          </li>
-        </ul>
-
-        <div class="summary-total">
-          <span class="summary-total-label">К оплате</span>
-          <span class="summary-total-price"
-            >{{ basket.totalSum.toLocaleString('RU', 'ru') }} ₽</span
-          >
-        </div>
-      </aside>
+      <OrderSummary/>
     </div>
   </div>
 </template>
@@ -446,6 +287,9 @@ import { ref, computed } from 'vue';
 import { useBasket } from '../stores/basket.js';
 import { usePayment } from '../stores/payment.js';
 import { useRouter } from 'vue-router';
+import HeaderPayment from '../ui/HeaderPayment.vue'
+import SelectionTabs from '@/ui/SelectionTabs.vue';
+import OrderSummary from './OrderSummary.vue';
 const router = useRouter();
 
 const basket = useBasket();
@@ -535,7 +379,7 @@ function onExpiryInput(event) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .error {
   font-size: 13px;
   color: #b3261e;

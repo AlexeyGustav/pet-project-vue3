@@ -30,7 +30,7 @@
 
     <MarkFilter v-model:selectedMarks="selectedMarks" />
 
-    <MaterialFilter v-model:selectedMaterial="selectedMaterial" :materialList="materialList" />
+    <MaterialFilter v-model:selectedMaterial="selectedMaterial" />
 
     <ColorFilter v-model:currentColor="currentColor" :colorList="colorList" />
 
