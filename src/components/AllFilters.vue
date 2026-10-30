@@ -30,7 +30,7 @@
 
     <MarkFilter v-model:selectedMarks="selectedMarks" />
 
-    <MaterialFilter v-model:selectedMaterial="selectedMaterial" :materialList="materialList" />
+    <MaterialFilter v-model:selectedMaterial="selectedMaterial" />
 
     <ColorFilter v-model:currentColor="currentColor" :colorList="colorList" />
 
@@ -64,6 +64,8 @@ const currentStyle = defineModel('currentStyle');
   max-height: calc(100vh - 112px);
   overflow-y: auto;
 }
+
+
 
 .filters-head {
   display: flex;

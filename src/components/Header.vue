@@ -3,14 +3,24 @@
     <div class="header-inner">
       <a class="logo" href="#">
         <svg class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C8 6 4 9 4 14a8 8 0 0 0 16 0c0-5-4-8-8-12z" />
-          <path d="M12 22V12" />
-        </svg>
-        <span class="logo-text"><b>ДОМ</b>&УЮТ</span>
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <!-- стебли -->
+            <path d="M8 14c0-4 3-6 4-8"/>
+            <path d="M16 14c0-4-2-5-4-8"/>
+            <!-- листик -->
+            <path d="M12 6c1-2 3-2 3-2s0 2-1.5 3" fill="currentColor" stroke="none" opacity="0.5"/>
+            <path d="M12 6c1-2 3-2 3-2s0 2-1.5 3"/>
+            <!-- вишни -->
+            <circle cx="8"  cy="17" r="3" fill="currentColor" stroke="none"/>
+            <circle cx="16" cy="17" r="3" fill="currentColor" stroke="none"/>
+            <!-- блик -->
+            <circle cx="7"  cy="16" r="0.9" fill="white" stroke="none" opacity="0.5"/>
+            <circle cx="15" cy="16" r="0.9" fill="white" stroke="none" opacity="0.5"/>
+          </svg>
+          <span class="logo-text"><b>МАМИН</b>&nbsp;САД</span>
       </a>
 
-      <form class="search" role="search" @submit.prevent>
+      <form  class="search" role="search" @submit.prevent>
         <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7" />
@@ -19,10 +29,10 @@
         <input
           class="search-input"
           type="search"
-          :value="textVisible"
-          @input="$emit('update:textVisible', $event.target.value)"
-          @focus="$emit('focusedEmit', true)"
-          @blur="$emit('focusedEmit', false)"
+          :value="search.input"
+          @input="search.writeInput($event)"
+          @focus="search.focusInput"
+          @blur="search.blurInput"
           placeholder="Поиск товаров…"
         />
       </form>
@@ -36,26 +46,31 @@
         <span class="account-text">Войти</span>
       </a>
 
-      <button class="cart-btn">
+      <router-link :to="{'name': 'basket'}" class="cart-btn" >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/>
           <circle cx="20" cy="21" r="1"/>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
         </svg>
         Корзина
-        <span class="cart-count">{{ headerBasket }}</span>
-      </button>
+        <span class="cart-count">{{ basket.headerBasket }}</span>
+      </router-link>
     </div>
   </header>
 </template>
 
 <script setup>
-const emit = defineEmits(['update:textVisible', 'focusedEmit']);
-defineProps(['textVisible', 'headerBasket']);
+import { useBasket } from '../stores/basket.js';
+import { useSearch } from '../stores/search.js';
+
+const basket = useBasket();
+const search = useSearch();
 
 </script>
 
 <style lang="scss" scoped>
+
+
 .site-header {
   position: sticky;
   top: 0;
@@ -74,6 +89,7 @@ defineProps(['textVisible', 'headerBasket']);
   align-items: center;
   gap: 24px;
 }
+
 
 .logo {
   display: flex;
