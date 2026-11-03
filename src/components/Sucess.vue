@@ -35,14 +35,9 @@
 </template>
 
 <script setup>
-import { useBasket } from '../stores/basket.js';
-import { usePayment } from '../stores/payment.js';
+import SucessIcon from '@/ui/SucessIcon.vue';
+import OrderCard from './OrderCard.vue';
 
-const basket = useBasket();
-const pay = usePayment();
-
-const today = new Date();
-const isoDate = today.toISOString().split('T')[0];
 </script>
 
 <style scoped></style>

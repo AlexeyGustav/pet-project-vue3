@@ -25,7 +25,7 @@
             @activeTab="filters.currencyCategory = $event"
           />
         </div>
-        <!-- <ToolBar :sum="filters.filteredProducts.length" /> -->
+        <ToolBar :sum="filters.filteredProducts.length" />
         <div class="product-grid">
           <Product
             v-for="product in filters.filteredProducts"
@@ -46,7 +46,7 @@
 <script setup>
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useBasket } from '../stores/basket.js';
 import { useSearch } from '../stores/search.js';
 import { useFilters } from '../stores/filtersProducts.js';
