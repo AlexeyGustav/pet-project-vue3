@@ -36,6 +36,14 @@ export default defineConfig([
     files: ['src/**/__tests__/*'],
   },
 
+  {
+    name: 'app/custom-vue-rules',
+    files: ['**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 
   skipFormatting,
