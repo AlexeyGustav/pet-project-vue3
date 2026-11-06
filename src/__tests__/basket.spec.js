@@ -7,6 +7,12 @@ describe('тесты стора корзины', () => {
     setActivePinia(createPinia());
   });
 
+  const product = {
+    id: 1,
+    price: 400,
+    quantity: 2,
+  };
+
   it('посчёт итоговой суммы', () => {
     const items = [
       {
@@ -27,12 +33,7 @@ describe('тесты стора корзины', () => {
     basket.items = items;
     expect(basket.totalSum).toBe(1220);
   });
-  it('Добавление и удаление товаров из корзины', () => {
-    const product = {
-      id: 1,
-      price: 400,
-      quantity: 2,
-    };
+  it('Добавление товаров в корзину', () => {
     const basket = useBasket();
     basket.addBasket(product);
 
@@ -44,9 +45,26 @@ describe('тесты стора корзины', () => {
 
     basket.plusCounter(product);
     expect(basket.items[0].quantity).toBe(3);
+  });
+  it('Убавление товаров из корзины', () => {
+    const basket = useBasket();
+    basket.addBasket(product);
+
+    expect(basket.items).toHaveLength(1);
+    expect(basket.items[0].quantity).toBe(1);
+
+    basket.addBasket(product);
+    expect(basket.items[0].quantity).toBe(2);
 
     basket.minusCounter(product);
-    expect(basket.items[0].quantity).toBe(2);
+    expect(basket.items[0].quantity).toBe(1);
+  });
+  it('Удаление товара из корзины', () => {
+    const basket = useBasket();
+    basket.addBasket(product);
+
+    expect(basket.items).toHaveLength(1);
+    expect(basket.items[0].quantity).toBe(1);
 
     basket.deleteCard(product);
     expect(basket.items).toHaveLength(0);
